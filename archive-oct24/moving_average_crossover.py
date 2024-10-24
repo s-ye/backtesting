@@ -36,13 +36,13 @@ def moving_average_crossover(hist, cash, risk):
                 losing_trades += 1
             length_of_trades.append(hist.index[i] - previous_buy_date)
             shares = 0
-    print("Cash: " + str(cash))
-    print("Shares: " + str(shares))
-    print("Total: " + str(cash + shares * hist["Close"].iloc[-1]))
-    print("Winning trades: " + str(winning_trades))
-    print("Losing trades: " + str(losing_trades))
+    # print("Cash: " + str(cash))
+    # print("Shares: " + str(shares))
+    # print("Total: " + str(cash + shares * hist["Close"].iloc[-1]))
+    # print("Winning trades: " + str(winning_trades))
+    # print("Losing trades: " + str(losing_trades))
     averagelen = sum(length_of_trades, timedelta(0)) / len(length_of_trades) if len(length_of_trades) > 0 else timedelta(0)
-    print("Average length of trades: " + str(averagelen))
+    # print("Average length of trades: " + str(averagelen))
     return cash + shares * hist["Close"].iloc[-1], winning_trades, losing_trades, averagelen, buy, sell
 
 def moving_average_crossover_with_random_threshold(hist, cash,risk):

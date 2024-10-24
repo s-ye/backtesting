@@ -1,0 +1,37 @@
+
+NVDA total gains 33475.634938, total investment 234.756349%
+last action: buy at 2024-09-26 at price: 124.029297
+average length of trades: 67 days 15:42:51.428571429
+winning trades: 4
+losing trades: 3
+
+NVO total gains 13276.993247, total investment 32.769932%
+last action: sell on 2024-09-20 at price: 126.970001
+average length of trades: 42 days 03:13:20
+winning trades: 4
+losing trades: 5
+
+CPNG total gains 10827.196784, total investment 8.271968%
+last action: buy at 2024-08-08 at price: 22.790001
+average length of trades: 31 days 15:54:00
+winning trades: 4
+losing trades: 6
+
+QCOM total gains 11361.116890, total investment 13.611169%
+last action: buy at 2024-09-20 at price: 169.830002
+average length of trades: 35 days 11:42:00
+winning trades: 5
+losing trades: 5
+
+INTC total gains 9492.335313, total investment -5.076647%
+last action: sell on 2024-10-23 at price: 21.980000
+average length of trades: 29 days 23:43:38.181818182
+winning trades: 4
+losing trades: 7
+
+UAL total gains 14244.499471, total investment 42.444995%
+last action: buy at 2024-09-03 at price: 43.970001
+average length of trades: 40 days 08:45:00
+winning trades: 2
+losing trades: 6
+
