@@ -63,8 +63,6 @@ with open('monitor/overview.txt', 'w') as f:
         f.write("winning trades: %d\n"%winning_trades)
         f.write("losing trades: %d\n"%losing_trades)
         f.write('\n')
-        print(buy)
-        print(sell)
 
 
 
