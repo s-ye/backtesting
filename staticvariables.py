@@ -1,10 +1,11 @@
 import numpy as np
+import pandas as pd
 
 stocks = ['NVDA','NVO','CPNG', 'QCOM', 'INTC', 'UAL', 'SE', 'AMD', 'TSM', 'WW', 'VKTX']
 strats = ['mac', 'rsi', 'avgdown']
 
-stocks = ['UAL']
-strats = ['avgdown']
+# stocks = ['NVDA']
+# strats = ['avgdown']
 risk = [.8]
 addon = [.8]
 relax = [10]
@@ -41,5 +42,9 @@ def processHist(hist):
         RS = average_gain / average_loss
         RSI = 100 - 100/(1 + RS)
         hist.loc[hist.index[i], "RSI"] = RSI
-    
+    # remove all the columns that are not numerical
+    hist = hist.drop(columns=["Dividends", "Stock Splits"])
+    # remove all the prices that are not close price
+    hist = hist.drop(columns=["Open", "High", "Low"])
+
     return hist

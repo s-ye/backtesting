@@ -47,7 +47,7 @@ def write(
     total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat
 ):
     
-    with open(name + '/' + 'overview_' + strat + '.txt', 'a') as f:
+    with open('/Users/songye03/Desktop/backtesting/monitor/overview_' + strat + '.txt', 'a') as f:
         # if no trades were made, skip the stock
         # write the current time up to minutes
         f.write(str(today) + '\n')
@@ -105,8 +105,6 @@ def write(
 
 lastbuy = {}
 
-# stocks = ['NVDA']
-# strats = ['mac']
 buysignaltoday = {stock: False for stock in sv.stocks}
 sellsignaltoday = {stock: False for stock in sv.stocks}
 
@@ -130,10 +128,10 @@ for strat in sv.strats:
         
 
 
-# buysignaltoday['NVDA'] = True
+
 #if any of the signals were today, write to a file
 for stock in sv.stocks:
     if buysignaltoday[stock] or sellsignaltoday[stock]:
-        with open('signals.txt', 'w') as f:
+        with open('/Users/songye03/Desktop/backtesting/signals.txt', 'w') as f:
             f.write(stock)
 

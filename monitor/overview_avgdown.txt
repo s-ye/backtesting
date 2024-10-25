@@ -1,7 +1,0 @@
-2024-10-25 12:00:00
-UAL value of portfolio 14278.224500, total return 42.782245%
-last action: buy at 2024-09-03 at price: 43.970001
-average length of trades: 26 days 03:00:00
-winning trades: 4
-losing trades: 4
-

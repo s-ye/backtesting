@@ -21,7 +21,7 @@ def send_email(subject, body, to_email, from_email, password):
         server.send_message(msg)
         print("Email sent successfully")
 
-filepath = 'signals.txt'
+filepath = '/Users/songye03/Desktop/backtesting/signals.txt'
 
 to_email = 'songyuye29@gmail.com'
 from_email = 'songyuye29@gmail.com'
@@ -29,7 +29,9 @@ password = 'qpkk fbdf mhtb gtoc'
 
 if check_file(filepath):
     subject = 'Trading signals updated'
-    body = ''
+    # body = contents of the file
+    with open(filepath, 'r') as f:
+        body = f.read()
     send_email(subject, body, to_email, from_email, password)
 else:
     print("No signals to send")
