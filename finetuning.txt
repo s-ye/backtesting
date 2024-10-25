@@ -1,0 +1,5 @@
+stock,strategy,rsiparams,averagedownparams,period,total,winning_trades,losing_trades,length_of_trades,buy,sell
+UAL,avgdown(10000, 0.8, 0.8, 10),('3mo', '1h'),10000.0,[],[],[],[],[]
+UAL,avgdown(10000, 0.8, 0.8, 10),('2y', '1h'),14211.166437084667,[555, 1329, 2142, 2780],[671, 2256, 2420, 2544],[Timedelta('41 days 00:00:00'), Timedelta('0 days 01:00:00'), Timedelta('97 days 01:00:00'), Timedelta('0 days 19:00:00'), Timedelta('9 days 02:00:00'), Timedelta('31 days 04:00:00'), Timedelta('2 days 00:00:00'), Timedelta('27 days 21:00:00')],[366, 592, 650, 660, 670, 854, 860, 870, 1845, 2130, 2140, 2205, 2261, 2456, 2500, 2510, 2530, 2593, 2650, 3240],[555, 671, 1329, 2142, 2256, 2420, 2544, 2780]
+UAL,avgdown(10000, 0.8, 0.8, 10),('1y', '1d'),12739.14527378254,[],[],[],[235],[]
+UAL,avgdown(10000, 0.8, 0.8, 10),('5y', '1d'),8232.559510605937,[458, 994],[666, 1216],[Timedelta('226 days 23:00:00'), Timedelta('22 days 00:00:00'), Timedelta('283 days 23:00:00'), Timedelta('50 days 00:00:00')],[274, 300, 651, 786, 800, 1127, 1180, 1241],[458, 666, 994, 1216]

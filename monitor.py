@@ -1,4 +1,27 @@
 #print some graphs to a folder called monitor
+
+
+# Ensure required packages are installed
+required_packages = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "seaborn",
+    "yfinance"
+]
+
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+for package in required_packages:
+    try:
+        __import__(package)
+    except ImportError:
+        install(package)
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -8,19 +31,26 @@ import yfinance as yf
 import datetime
 from datetime import timedelta
 import strategies as s
+import staticvariables as sv
 
 def applyStrategy(hist, strategy):
+    rsiparams = (10000,.8,20)
+    averagedownparams = (10000,.8,.5,10)
     if strategy == 'rsi':
-        return s.rsifactor(hist,True)
+        return s.rsifactor(hist,rsiparams,True)
     elif strategy == 'mac':
-        return s.rsifactor(hist,False)
+        return s.rsifactor(hist,rsiparams,False)
+    elif strategy == 'avgdown':
+        return s.averageDown(hist,averagedownparams)
     
 def write(
     total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat
 ):
-    # if no trades were made, skip the stock
     
     with open(name + '/' + 'overview_' + strat + '.txt', 'a') as f:
+        # if no trades were made, skip the stock
+        # write the current time up to minutes
+        f.write(str(today) + '\n')
         if len(buy) == 0:
             f.write(stock + ' no trades made\n\n')
             return
@@ -41,7 +71,7 @@ def write(
         plt.close(fig)
         # write to overview.txt
         
-        f.write(stock + ' total gains %f, total investment %f%%\n'%(total, invest))
+        f.write(stock + ' value of portfolio %f, total return %f%%\n'%(total, invest))
         # check if the last action was a buy or sell
         if len(sell) == 0 or buy[-1] > sell[-1]:
             f.write('last action: buy at ')
@@ -74,10 +104,11 @@ def write(
 
 
 lastbuy = {}
-stocks = ['NVDA','NVO','CPNG', 'QCOM', 'INTC', 'UAL']
-strats = ['rsi', 'mac']
-buysignaltoday = {stock: False for stock in stocks}
-sellsignaltoday = {stock: False for stock in stocks}
+
+# stocks = ['NVDA']
+# strats = ['mac']
+buysignaltoday = {stock: False for stock in sv.stocks}
+sellsignaltoday = {stock: False for stock in sv.stocks}
 
 today = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
 name = 'monitor'
@@ -86,37 +117,11 @@ name = 'monitor'
 if not os.path.exists(name):
     os.makedirs(name)
 
-for strat in strats:
-    for stock in stocks:
+for strat in sv.strats:
+    for stock in sv.stocks:
         ticker = yf.Ticker(stock)
         hist = ticker.history(period="2y", interval="1h")
-        hist["Close"] = hist["Close"].astype(float)
-        hist["Volume"] = hist["Volume"].astype(float)
-        hist["SMA_50"] = hist["Close"].rolling(window=50).mean()
-        hist["SMA_200"] = hist["Close"].rolling(window=200).mean()
-        hist["RSI"] = np.nan
-
-        for i in range(1, len(hist)):
-        # compute the RSI factor at this point
-        # we will use a 14 day period
-        # we will use the closing price
-        # we will use the average gain and average loss
-        # to calculate the RSI
-            average_gain = 0
-            average_loss = 0
-            for j in range(1,15):
-                if hist["Close"].iloc[i-j] > hist["Close"].iloc[i-j-1]:
-                    average_gain += hist["Close"].iloc[i-j] - hist["Close"].iloc[i-j-1]
-                else:
-                    average_loss += hist["Close"].iloc[i-j-1] - hist["Close"].iloc[i-j]
-            average_gain /= 14
-            average_loss /= 14
-            if average_loss == 0:
-                hist.loc[hist.index[i], "RSI"] = 100
-                continue
-            RS = average_gain / average_loss
-            RSI = 100 - 100/(1 + RS)
-            hist.loc[hist.index[i], "RSI"] = RSI
+        hist = sv.processHist(hist)
 
         
         total, winning_trades, losing_trades, length_of_trades, buy, sell = applyStrategy(hist, strat)
@@ -125,9 +130,9 @@ for strat in strats:
         
 
 
-
+# buysignaltoday['NVDA'] = True
 #if any of the signals were today, write to a file
-for stock in stocks:
+for stock in sv.stocks:
     if buysignaltoday[stock] or sellsignaltoday[stock]:
         with open('signals.txt', 'w') as f:
             f.write(stock)
