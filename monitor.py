@@ -12,16 +12,6 @@ required_packages = [
 
 import subprocess
 import sys
-
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-for package in required_packages:
-    try:
-        __import__(package)
-    except ImportError:
-        install(package)
-
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -33,18 +23,10 @@ from datetime import timedelta
 import strategies as s
 import staticvariables as sv
 
-def applyStrategy(hist, strategy):
-    rsiparams = (10000,.8,20)
-    averagedownparams = (10000,.8,.5,10)
-    if strategy == 'rsi':
-        return s.rsifactor(hist,rsiparams,True)
-    elif strategy == 'mac':
-        return s.rsifactor(hist,rsiparams,False)
-    elif strategy == 'avgdown':
-        return s.averageDown(hist,averagedownparams)
+
     
 def write(
-    total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat
+    total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat, trade_actions, closed_positions
 ):
     
     with open('/Users/songye03/Desktop/backtesting/monitor/overview_' + strat + '.txt', 'a') as f:
@@ -100,13 +82,20 @@ def write(
         f.write("winning trades: %d\n"%len(winning_trades))
         f.write("losing trades: %d\n"%len(losing_trades))
         f.write('\n')
+
+        # show the trades made in the overview
+        # i want the whole dataframe to be shown in the overview
+        
+        f.write(str(trade_actions))
+        f.write('\n\n')
+        f.write(str(closed_positions))
     
 
 
 lastbuy = {}
 
-buysignaltoday = {stock: False for stock in sv.stocks}
-sellsignaltoday = {stock: False for stock in sv.stocks}
+buysignaltoday = {stock: False for stock in sv.stocks_monitor}
+sellsignaltoday = {stock: False for stock in sv.stocks_monitor}
 
 today = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
 name = 'monitor'
@@ -115,23 +104,20 @@ name = 'monitor'
 if not os.path.exists(name):
     os.makedirs(name)
 
-for strat in sv.strats:
-    for stock in sv.stocks:
+for strat in sv.strats_monitor:
+    for stock in sv.stocks_monitor:
         ticker = yf.Ticker(stock)
         hist = ticker.history(period="2y", interval="1h")
         hist = sv.processHist(hist)
 
         
-        total, winning_trades, losing_trades, length_of_trades, buy, sell = applyStrategy(hist, strat)
+        total, winning_trades, losing_trades, length_of_trades, buy, sell, trade_actions, closed_positions = s.applyStrategy(hist, strat)
         
-        write(total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat)
+        write(total, winning_trades, losing_trades, length_of_trades, buy, sell, stock, strat,trade_actions, closed_positions)
         
-
-
 
 #if any of the signals were today, write to a file
-for stock in sv.stocks:
+for stock in sv.stocks_monitor:
     if buysignaltoday[stock] or sellsignaltoday[stock]:
         with open('/Users/songye03/Desktop/backtesting/signals.txt', 'w') as f:
             f.write(stock)
-
